@@ -1,0 +1,189 @@
+.TH ETA 1 "09 February 2019" GNU "eta manual"
+.SH NAME
+eta \- calculate eta of a running process by repeatedly inspecting its progress
+.SH SYNOPSIS
+.B eta
+[\fIOPTIONS\fR]
+\fITARGET\fR
+\fIPROGRESS_COMMAND\fR
+.SH DESCRIPTION
+.B eta
+prints the progress and estimated time to completion based on the given \fIPROGRESS_COMMAND\fR and \fITARGET\fR value.
+
+\fIPROGRESS_COMMAND\fR should be a command that prints the current progress of some running process. If, for example, the running process is a file copy, a suitable progress command would be
+.B du -b some.file
+
+\fITARGET\fR should be the target value (value representing 100%) for the progress command. For a file copy the target value should be the size of the source file.
+
+If you have for example the following process running:
+
+.RS
+.B scp -r dir/ myserver:
+.RE
+
+you could monitor its progress and eta using
+
+.RS
+.B eta """$(du -bs dir)""" ssh myserver du -bs dir
+.RE
+
+It's similar to
+.BR watch (1)
+in the sense that it executes the given command repeatedly, but instead of displaying the output of the command, it parses the output and displays the progress and eta.
+
+See \fBNOTES\fR for further details.
+
+.SH OPTIONS
+Options adjust the behavior and output of
+.BR eta .
+
+.TP
+.B \-s, \-\-start VALUE|initial
+Use
+.B VALUE
+as the starting value for the process (the value representing 0% progress). If you are, for example, appending a 1GB file onto an existing 1GB file\[u2026]
+
+.B cat\ new_1GB\ >> existing_1GB
+
+\[u2026]you use\[u2026]
+
+.B eta \-\-start 1G 2G du -b existing_1GB
+
+\[u2026]to avoid having the progress start at 50%.
+
+If you use
+.B initial
+the first value returned by the progress command will be used as start value. This could be useful if you don't know the original start value, or if you're only interested in the progress of the remaining process.
+
+The default starting value is 0.
+.TP
+.B \-i, \-\-interval SECS
+Run the progress command every
+.B SECS
+seconds. (May not be used in conjunction with
+.BR \-\-cont .)
+.TP
+.B \-d, \-\-down
+To be used when the value decreases during progress. For example, if a script processes files in a directory and removes them as they get processed, you could use the following to monitor the progress:
+
+.B eta\ \-\-down 0 """ls | wc -l"""
+
+Since the starting value will rarely be 0 when using
+.B \-\-down
+the default for
+.B \-\-start
+is changed to
+.BR initial.
+.TP
+.B \-w, \-\-width COLS
+Specifies the width of the output of
+.BR eta .
+If this option is not provided, the output will fill the width of the terminal, or, default to 80 columns if there's no TTY.
+.TP
+.B \-c, \-\-cont
+Instead of running the given command repeatedly,
+.B eta
+will let the command keep running, and read the progress continuously line by line. If the process to be monitored writes its progress to a log file, you could for example use something like
+
+.B eta \-\-cont 100 """tail -n1 -f program.log | grep Progress:"""
+
+(May not be used in conjunction with
+.BR \-\-interval .)
+.TP
+.B \-h, \-\-help
+Prints a help message and exits.
+.SH EXAMPLES
+.SS Copying files
+If you're copying a directory to a remote host using something like
+
+.B scp -r dir/ server:
+
+you can monitor the progress using
+
+.B eta \-i 10 """$(du -bs dir)""" ssh server du -bs dir
+
+.SS Growing number of files
+If you're processing lots of files using something like
+
+.B mogrify -resize 50% -path output-dir *.jpg
+
+(Resize all jpg images and store the smaller versions in \fBoutput-dir\fR.) You can use
+
+.B eta $(ls *.jpg | wc \-l) """ls output-dir/*.jpg | wc \-l"""
+
+Note that the number of files may reach the target value before the last file is fully processed.
+
+.SS Shrinking number of files
+If you're processing files and removing them as they get processed\[u2026]
+
+.B for f in *; do ./process.sh $f && rm $f; done
+
+\[u2026]you can monitor the progress using:
+
+.B eta \-\-down 0 """$(ls | wc \-l)"""
+
+.SS The process prints progres in a log file
+If your running process logs the progress to a file, you could do something like
+
+.B eta \-\-cont 100 """tail -n1 -f program.log | grep Progress:"""
+
+.SS The process prints progres on stdout
+If you have a process that prints its progress on stdout:
+
+$
+.B ./my-script.sh
+.br
+Progress: 1 out of 55...
+.br
+Progress: 2 out of 55...
+.br
+Progress: 3 out of 55...
+.br
+\[u2026]
+
+you can use
+.B \-\-cont
+and the command itself as argument to
+.B eta:
+
+.B eta \-\-cont 55 ./my-script.sh
+
+or, if you're a UUOC fan:
+
+.B ./my-script.sh | eta \-\-cont 55 cat
+
+.SH EXIT STATUS
+.TP
+.B 0
+Command completed successfully
+.TP
+.B 1
+Invalid command line arguments
+.TP
+.B 2
+Execution of external command failed
+.TP
+.B 3
+Could not find a number indicating progress in command output
+
+.SH NOTES
+When parsing the \fITARGET\fR value and \fB\-\-start\fR argument, \fBeta\fR will look for the first digit and start parsing from there. The given values may have a suffix indicating a metric or binary magnitude. Supported suffixes are \fBk\fR, \fBm\fR, \fBg\fR, \fBt\fR, \fBki\fR, \fBmi\fR, \fBgi\fR and \fBti\fR (representing 10^3, 10^6, 10^9, 10^12, 2^10, 2^20, 2^30 and 2^40 resp.)
+
+All arguments following the \fITARGET\fR value will be joined and used as the \fIPROGRESS_COMMAND\fR. That is, there's no need for double quotes here:
+
+.B eta 5g du -b bigfile
+
+If stdout is a file or pipe,
+.B eta
+will print a new line between each progress output, instead of a carriage return. If you want the new line behavior in the terminal, simply pipe the output through
+.BR cat (1).
+
+.B eta
+will only look for the progress value in the first 1000 characters of the first line of output written by the progress command (unless \fB\-\-cont\fR is provided).
+
+.SH AUTHOR
+Written by Andreas Lundblad (andreas.lundblad@gmail.com).
+.SH REPORTING BUGS
+Report bugs in the issue tracker at github: <https://github.com/aioobe/eta/issues>
+.SH SEE ALSO
+watch(1), pv(1), progress(1)
