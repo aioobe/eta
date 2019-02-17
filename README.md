@@ -1,11 +1,15 @@
-# eta - A tool for monitoring progress and ETA of an arbitrary processes
+# eta - A tool for monitoring progress and ETA of an arbitrary process
 
 `eta` is a command line tool that takes two arguments:
 
-1. A _target value_
-2. A _command_ to inspect the current progress value
+1. A **target value**
+2. A **command** to inspect the current progress value
 
-`eta` will execute the given <u>command</u> repeatedly, look for the first number in the commands output, and estimate the time until it reaches the given _target value_.
+`eta` will execute the given **command** once every second, look for the first number in the commands output, and estimate the time until it reaches the given **target value**.
+
+When using `--cont`, **command** runs continuously, and `eta` will read the output line by line to determine progress.
+
+See [man page](https://github.com/aioobe/eta/wiki/eta-man-page) for full documentation.
 
 ## Example 1: File copy
 Use `du -bs` to monitor the size of a directory.

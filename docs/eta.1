@@ -43,11 +43,15 @@ Use
 .B VALUE
 as the starting value for the process (the value representing 0% progress). If you are, for example, appending a 1GB file onto an existing 1GB file\[u2026]
 
+.RS
 .B cat\ new_1GB\ >> existing_1GB
+.RE
 
 \[u2026]you use\[u2026]
 
+.RS
 .B eta \-\-start 1G 2G du -b existing_1GB
+.RE
 
 \[u2026]to avoid having the progress start at 50%.
 
@@ -66,7 +70,9 @@ seconds. (May not be used in conjunction with
 .B \-d, \-\-down
 To be used when the value decreases during progress. For example, if a script processes files in a directory and removes them as they get processed, you could use the following to monitor the progress:
 
+.RS
 .B eta\ \-\-down 0 """ls | wc -l"""
+.RE
 
 Since the starting value will rarely be 0 when using
 .B \-\-down
@@ -85,7 +91,9 @@ Instead of running the given command repeatedly,
 .B eta
 will let the command keep running, and read the progress continuously line by line. If the process to be monitored writes its progress to a log file, you could for example use something like
 
+.RS
 .B eta \-\-cont 100 """tail -n1 -f program.log | grep Progress:"""
+.RE
 
 (May not be used in conjunction with
 .BR \-\-interval .)
@@ -96,42 +104,56 @@ Prints a help message and exits.
 .SS Copying files
 If you're copying a directory to a remote host using something like
 
+.RS
 .B scp -r dir/ server:
+.RE
 
 you can monitor the progress using
 
+.RS
 .B eta \-i 10 """$(du -bs dir)""" ssh server du -bs dir
+.RE
 
 .SS Growing number of files
 If you're processing lots of files using something like
 
+.RS
 .B mogrify -resize 50% -path output-dir *.jpg
+.RE
 
 (Resize all jpg images and store the smaller versions in \fBoutput-dir\fR.) You can use
 
+.RS
 .B eta $(ls *.jpg | wc \-l) """ls output-dir/*.jpg | wc \-l"""
+.RE
 
 Note that the number of files may reach the target value before the last file is fully processed.
 
 .SS Shrinking number of files
 If you're processing files and removing them as they get processed\[u2026]
 
+.RS
 .B for f in *; do ./process.sh $f && rm $f; done
+.RE
 
 \[u2026]you can monitor the progress using:
 
+.RS
 .B eta \-\-down 0 """$(ls | wc \-l)"""
+.RE
 
 .SS The process prints progres in a log file
 If your running process logs the progress to a file, you could do something like
 
+.RS
 .B eta \-\-cont 100 """tail -n1 -f program.log | grep Progress:"""
+.RE
 
 .SS The process prints progres on stdout
 If you have a process that prints its progress on stdout:
 
-$
-.B ./my-script.sh
+.RS
+$ ./my-script.sh
 .br
 Progress: 1 out of 55...
 .br
@@ -140,17 +162,22 @@ Progress: 2 out of 55...
 Progress: 3 out of 55...
 .br
 \[u2026]
+.RE
 
 you can use
 .B \-\-cont
 and the command itself as argument to
 .B eta:
 
+.RS
 .B eta \-\-cont 55 ./my-script.sh
+.RE
 
 or, if you're a UUOC fan:
 
+.RS
 .B ./my-script.sh | eta \-\-cont 55 cat
+.RE
 
 .SH EXIT STATUS
 .TP
@@ -171,7 +198,9 @@ When parsing the \fITARGET\fR value and \fB\-\-start\fR argument, \fBeta\fR will
 
 All arguments following the \fITARGET\fR value will be joined and used as the \fIPROGRESS_COMMAND\fR. That is, there's no need for double quotes here:
 
+.RS
 .B eta 5g du -b bigfile
+.RE
 
 If stdout is a file or pipe,
 .B eta
