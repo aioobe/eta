@@ -20,3 +20,14 @@ Use `ls | wc -l` to monitor the number of files in a directory.
 <img src="http://aioo.be/eta/demo2.gif" />
 
 If the `resized` directory is initially non empty, you can use `--start initial` which tells `eta` to use the first value read (instead of 0) as the 0% progress value.
+
+## Example 3: Tailing a log
+With `--cont` the progress command is kept running, and the progress is determined by reading the output line by line continuously.
+
+<img src="http://aioo.be/eta/demo3.gif" />
+
+## Example 4: Counting lines
+You can use `cat -n` to add line numbers to the output of a command. The line numbers can then be used as a progress indicator. For example, since `tar v...` prints one file per line, the progress can be monitored by counting lines as follows:
+
+<img src="http://aioo.be/eta/demo4.gif" />
+
