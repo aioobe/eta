@@ -14,40 +14,41 @@
 // on the format "./eta: some error" in various places in the code.
 char *program_name;
 
-value_t query_progress(char *cmd, bool cont);
+value_t run_progress_cmd(char *cmd, bool cont);
+char *joined_cmd(int n, char **parts);
 timestamp_t now();
 
 int main(int argc, char **argv) {
   program_name = argv[0];
 
-  Options options;
-  parse_options(argc, argv, &options);
+  Options opts;
+  parse_options(argc, argv, &opts);
+  char *cmd = joined_cmd(opts.n_cmd, opts.cmd);
 
-  // Initialize later
+  // Initialize after first measurement
   value_t initial_value;
   
   while (1) {
 
-    value_t current_value = query_progress(options.progress_cmd, options.cont);
+    value_t current_value = run_progress_cmd(cmd, opts.cont);
 
     // First measurement?
     if (oldest_measurement() == NULL) {
-      initial_value = options.start_mode == START_MODE_INITIAL
+      initial_value = opts.start_mode == START_MODE_INITIAL
           ? current_value
-          : options.start_mode;
+          : opts.start_mode;
     }
 
     add_measurement(now(), current_value);
 
     double ratio_completed = compute_ratio_completed(
-        initial_value, options.target_value, options.down);
+        initial_value, opts.target_value, opts.down);
 
-    double seconds_left = compute_seconds_left(
-        options.target_value, options.down);
+    double seconds_left = compute_seconds_left(opts.target_value, opts.down);
 
     print_progress_and_eta(
-        options.output_width,
-        MAX(initial_value, options.target_value),
+        opts.output_width,
+        MAX(initial_value, opts.target_value),
         current_value,
         ratio_completed,
         seconds_left);
@@ -56,17 +57,17 @@ int main(int argc, char **argv) {
       break;
     }
 
-    if (!options.cont) {
-      sleep(options.interval);
+    if (!opts.cont) {
+      sleep(opts.interval);
     }
   }
 
-  free(options.progress_cmd);
+  free(cmd);
   return SUCCESS;
 }
 
 // Execute cmd. Look for a numeric value in the output.
-value_t query_progress(char *cmd, bool cont) {
+value_t run_progress_cmd(char *cmd, bool cont) {
 
   // !cont: Opened / closed each invocation
   //  cont: Opened / closed each invocation
@@ -123,6 +124,30 @@ value_t query_progress(char *cmd, bool cont) {
   }
   
   return value;
+}
+
+// Join all parts of the cmd strings
+// Note: It is the responsible of the caller to free the allocated memory.
+char *joined_cmd(int n, char **parts) {
+
+  // Pass 1: Allocate memory
+  int total_len = 0;
+  for (int i = 0; i < n; i++) {
+    // +1 for spaces in-between and trailing \0.
+    total_len += strlen(parts[i]) + 1;
+  }
+  char *joined = malloc(total_len);
+
+  // Pass 2: Concatenate strings
+  char *end = joined;
+  for (int i = 0; i < n; i++) {
+    strcpy(end, parts[i]);
+    end += strlen(parts[i]);
+    if (i < n - 1) {
+      *end++ = ' ';
+    }
+  }
+  return joined;
 }
 
 // Return the current time

@@ -14,7 +14,8 @@ typedef struct {
   bool down;
   bool cont;
   unsigned int output_width;
-  char *progress_cmd;
+  int n_cmd;
+  char **cmd;
 } Options;
 
 void parse_options(int argc, char** argv, Options *options);

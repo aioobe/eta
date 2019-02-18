@@ -11,7 +11,6 @@ char *get_opt_arg(int argi, int argc, char **argv, char *opt_name);
 value_t parse_suffixed_value(char *arg_name, char *arg);
 int parse_numeric_arg(char *arg_name, char *arg);
 void error(const char *format, ...);
-char *join(int n, char **parts);
 void print_usage();
 
 // Parse argv and store the result in options.
@@ -83,8 +82,9 @@ void parse_options(int argc, char **argv, Options *options) {
   if (argi >= argc) {
     error("no progress command provided");
   }
-  options->progress_cmd = join(argc - argi, argv + argi);
-
+  options->n_cmd = argc - argi;
+  options->cmd = argv + argi;
+  
   // --cont and --interval are mutually exclusive
   if (interval_provided && options->cont) {
     error("at most one of --interval and --cont may be specified");
@@ -182,30 +182,6 @@ int parse_numeric_arg(char *arg_name, char *arg) {
     error(err_fmt, arg_name, arg);
   }
   return parsed;
-}
-
-// Join a list of strings.
-// Note: It is the responsible of the caller to free the allocated memory.
-char *join(int n, char **parts) {
-
-  // Pass 1: Allocate memory
-  int total_len = 0;
-  for (int i = 0; i < n; i++) {
-    // +1 for spaces in-between and trailing \0.
-    total_len += strlen(parts[i]) + 1;
-  }
-  char *joined = malloc(total_len);
-
-  // Pass 2: Concatenate strings
-  char *end = joined;
-  for (int i = 0; i < n; i++) {
-    strcpy(end, parts[i]);
-    end += strlen(parts[i]);
-    if (i < n - 1) {
-      *end++ = ' ';
-    }
-  }
-  return joined;
 }
 
 // Print an error message and exit.
