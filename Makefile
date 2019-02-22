@@ -9,8 +9,9 @@ eta: $(OBJECTS)
 	$(CC) $^ -o $@
 
 $(OBJ)/%.o: $(SRC)/%.c
+	mkdir -p $(OBJ)
 	$(CC) -I$(SRC) -c $< -o $@
 
 .PHONY: clean
 clean:
-	rm -f $(OBJ)/*.o
+	rm -rf $(OBJ) ./eta
