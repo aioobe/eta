@@ -20,7 +20,7 @@ See [man page](https://github.com/aioobe/eta/wiki/eta-man-page) for full documen
     sudo apt-get install eta
 
 ### Other
-Download and build:
+Download repo, build and install manually:
 
     make
     make install
