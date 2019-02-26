@@ -11,11 +11,19 @@ When using `--cont`, **command** runs continuously, and `eta` will read the outp
 
 See [man page](https://github.com/aioobe/eta/wiki/eta-man-page) for full documentation.
 
-## Build
+## Installation
+
+### Ubuntu
+
+    sudo add-apt-repository ppa:aioobe/ppa
+    sudo apt-get update
+    sudo apt-get install eta
+
+### Other
+Download and build:
 
     make
-
-Then copy `./eta` to a directory in your path.
+    make install
 
 ## Example Usage
 ### Example 1: File copy
