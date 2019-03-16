@@ -142,14 +142,25 @@ If you're processing files and removing them as they get processed\[u2026]
 .B eta \-\-down 0 """$(ls | wc \-l)"""
 .RE
 
-.SS The process prints progres in a log file
+.SS Counting lines
+You can use
+.B \-\-cont
+and
+.B cat -n
+to continously monitor progress based on number of lines printed:
+
+.RS
+.B tar vcfz bkp.tgz dir/ | eta \-\-cont $(find dir/ | wc \-l) cat -n
+.RE
+
+.SS The process prints progress in a log file
 If your running process logs the progress to a file, you could do something like
 
 .RS
 .B eta \-\-cont 100 """tail -n1 -f program.log | grep Progress:"""
 .RE
 
-.SS The process prints progres on stdout
+.SS The process prints progress on stdout
 If you have a process that prints its progress on stdout:
 
 .RS
