@@ -20,7 +20,7 @@ double rate(Measurement *m1, Measurement *m2) {
 
 // Calculate the average rate of change.
 //
-// This function assumes that we have at least tmo measurements.
+// This function assumes that we have at least two measurements.
 double average_rate() {
   Measurement *oldest = oldest_measurement();
   Measurement *latest = last_measurement();
