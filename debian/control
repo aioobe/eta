@@ -11,7 +11,7 @@ Vcs-Git: https://github.com/aioobe/eta.git
 Package: eta
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Generic tool for monitoring ETA and progress of an arbitrary process
+Description: Utility for monitoring ETA and progress of an arbitrary process
  ETA is a shell utility to monitor the progress of arbitrary processes. Given a
  target value and a command to run that generates the current value, ETA will
  print a progress bar and an up-to-date estimated time for the process to
