@@ -164,7 +164,7 @@ void print_progress_and_eta(unsigned int specified_width, value_t max_value,
       bool no_field_printed = true;
       for (int i = 0; i < n_fields; i++) {
         bool last_chance = i == n_fields - 1;
-        if (fields[i] || last_chance && no_field_printed) {
+        if (fields[i] || (last_chance && no_field_printed)) {
 
           int digits = num_digits(fields[i]);
           int actual_width = digits + 2; // +2: ' ' separator and unit char

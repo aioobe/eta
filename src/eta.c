@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
   char *cmd = joined_cmd(opts.n_cmd, opts.cmd);
 
   // Initialize after first measurement
-  value_t initial_value;
+  value_t initial_value = 0;
   
   while (1) {
 
