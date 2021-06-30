@@ -1,9 +1,15 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: eta
+Upstream-Contact: Andreas Lundblad <andreas.lundblad@gmail.com>
 Source: https://github.com/aioobe/eta
 
 Files: *
 Copyright: 2019 Andreas Lundblad <andreas.lundblad@gmail.com>
+License: GPL-3.0+
+
+Files: debian/*
+Copyright: 2019 Andreas Lundblad <andreas.lundblad@gmail.com>
+           2021 Mark King <mark@vemek.co>
 License: GPL-3.0+
 
 License: GPL-3.0+
