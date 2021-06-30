@@ -2,11 +2,12 @@ Source: eta
 Section: utils
 Priority: optional
 Maintainer: Mark King <mark@vemek.co>
-Build-Depends: debhelper (>= 12)
-Standards-Version: 4.3.0
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.5.1
 Homepage: https://github.com/aioobe/eta
 Vcs-Browser: https://github.com/aioobe/eta
 Vcs-Git: https://github.com/aioobe/eta.git
+Rules-Requires-Root: no
 
 Package: eta
 Architecture: any
