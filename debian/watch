@@ -1,3 +1,10 @@
 version=4
-opts="filenamemangle=s/(?:.*)?v?(\d[\d\.]*)\.tar\.gz/eta-$1.tar.gz/" \
-https://github.com/aioobe/eta/tags (?:.*/)?v?(\d[\d\.]*)\.tar\.gz
+opts=\
+pgpmode=next,\
+filenamemangle=s/(?:.*\/)?v?@ANY_VERSION@\.tar\.gz/eta-$1.tar.gz/ \
+https://github.com/aioobe/eta/releases \
+(?:.*/)?v?@ANY_VERSION@\.tar\.gz debian uupdate
+
+opts="pgpmode=previous" \
+https://github.com/aioobe/eta/releases \
+(?:.*/)v?(1\.0\.1)\.tar\.gz\.asc previous
