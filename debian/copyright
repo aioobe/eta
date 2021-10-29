@@ -5,14 +5,14 @@ Source: https://github.com/aioobe/eta
 
 Files: *
 Copyright: 2019 Andreas Lundblad <andreas.lundblad@gmail.com>
-License: GPL-3.0+
+License: GPL-3.0
 
 Files: debian/*
 Copyright: 2019 Andreas Lundblad <andreas.lundblad@gmail.com>
            2021 Mark King <mark@vemek.co>
-License: GPL-3.0+
+License: GPL-3.0
 
-License: GPL-3.0+
+License: GPL-3.0
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
