@@ -1,5 +1,5 @@
-eta (1.0.1-1) unstable; urgency=low
+eta (1.0.1-2) unstable; urgency=low
 
   * Initial release. Closes: #923225
 
- -- Mark King <mark@vemek.co>  Sat, 26 Jun 2021 15:34:19 +0000
+ -- Mark King <mark@vemek.co>  Sat, 30 Oct 2021 14:09:19 +0000
