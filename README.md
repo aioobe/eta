@@ -13,7 +13,7 @@ See [man page](https://github.com/aioobe/eta/wiki/eta-man-page) for full documen
 
 ## Installation
 
-### Ubuntu 22.10+
+### Ubuntu 22.04+
 
     sudo apt install eta
 
