@@ -13,7 +13,11 @@ See [man page](https://github.com/aioobe/eta/wiki/eta-man-page) for full documen
 
 ## Installation
 
-### Ubuntu
+### Ubuntu 22.10+
+
+    sudo apt install eta
+
+### Ubuntu (older versions)
 
     sudo add-apt-repository ppa:aioobe/ppa
     sudo apt-get update
