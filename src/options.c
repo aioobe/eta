@@ -159,7 +159,7 @@ value_t parse_suffixed_value(char *arg_name, char *arg) {
   }
   long long magnitude = magnitude_for_suffix(tail);
   if (magnitude == -1) {
-    error("invalid %s value suffix -- '%s'", tail);
+    error("invalid %s value suffix -- '%s'", arg_name, tail);
   }
   return magnitude * value;
 }
