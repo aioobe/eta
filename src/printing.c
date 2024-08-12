@@ -53,6 +53,12 @@ unsigned int num_digits(int n) {
   return i;
 }
 
+unsigned int num_digits_value(value_t n) {
+  int i = 1;
+  for (; n /= 10; i++);
+  return i;
+}
+
 // Initialized the next output field.
 void init_next_field(bool *is_first_field, bool cr_on_first) {
   if (!*is_first_field) {
@@ -73,7 +79,7 @@ void print_progress_and_eta(unsigned int specified_width, value_t max_value,
   unsigned int width = total_width(specified_width, terminal_width);
 
   // Default widths
-  unsigned int w_current_value = num_digits(max_value);
+  unsigned int w_current_value = num_digits_value(max_value);
   unsigned int w_percent = 4; // Ex: "100%"
   unsigned int w_eta = 14;    // Ex: "ETA 12h 16m 5s"
 
