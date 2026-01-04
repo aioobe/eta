@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
     add_measurement(now(), current_value);
 
     double ratio_completed = compute_ratio_completed(
-        initial_value, opts.target_value, opts.down);
+        initial_value, opts.target_value);
 
     double seconds_left = compute_seconds_left(opts.target_value, opts.down);
 
